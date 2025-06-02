@@ -1,0 +1,7 @@
+module load_dff(input a, input s, input clk, output reg y);
+  wire d;
+  assign d = s ? y : a;
+
+  always @(posedge clk)
+    y <= d;
+endmodule

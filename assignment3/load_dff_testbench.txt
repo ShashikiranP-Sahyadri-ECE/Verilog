@@ -1,0 +1,24 @@
+module tb_load_dff;
+  reg a, s, clk;
+  wire y;
+
+  load_dff uut(.a(a), .s(s), .clk(clk), .y(y));
+
+  initial begin
+    $dumpfile("load_dff.vcd");
+    $dumpvars(0, tb_load_dff);
+    
+    clk = 0; a = 0; s = 0;
+    #5 a = 1;
+    #5 clk = 1; #5 clk = 0; // load a = 1
+    #5 s = 1;               // hold
+    #5 clk = 1; #5 clk = 0;
+    #5 a = 0;               // should be ignored
+    #5 clk = 1; #5 clk = 0;
+    #5 s = 0;
+    #5 clk = 1; #5 clk = 0; // load new a = 0
+    #10 $finish;
+  end
+
+  always #2.5 clk = ~clk;
+endmodule
