@@ -1,0 +1,39 @@
+`timescale 1ns / 1ps
+
+module up_down_counter_tb;
+
+    reg clk;
+    reg reset;
+    reg up_down;
+    wire [3:0] count;
+
+    up_down_counter uut (
+        .clk(clk),
+        .reset(reset),
+        .up_down(up_down),
+        .count(count)
+    );
+
+    initial begin
+        $dumpfile("up_down_counter.vcd");
+        $dumpvars(0, up_down_counter_tb);
+
+        clk = 0;
+        reset = 1;
+        up_down = 1;
+
+        #20 reset = 0;
+
+        // Count up for some time
+        #100 up_down = 1;
+
+        // Count down for some time
+        #100 up_down = 0;
+
+        #100 $finish;
+    end
+
+    // Clock generation: 10ns period
+    always #5 clk = ~clk;
+
+endmodule
